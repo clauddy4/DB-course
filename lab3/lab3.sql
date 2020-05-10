@@ -1,56 +1,56 @@
 use bd_course; 
 
 -- 1. INSERT
--- 1.1. Без указания списка полей
+-- 1.1. Р‘РµР· СѓРєР°Р·Р°РЅРёСЏ СЃРїРёСЃРєР° РїРѕР»РµР№
    INSERT INTO employee VALUES ('1', 'Andrey', 'Tokarev', 'QA engineer', 'tokarinze@gmail.com' );
 
---  1.2. С указанием списка полей
+--  1.2. Г‘ ГіГЄГ Г§Г Г­ГЁГҐГ¬ Г±ГЇГЁГ±ГЄГ  ГЇГ®Г«ГҐГ©
   	INSERT INTO project (title, cost, start_date, ending_date) VALUES ('BD course', '1000000000', '11-12-20', '12-10-28');
 
---  3. С чтением значения из другой таблицы
+--  3. Г‘ Г·ГІГҐГ­ГЁГҐГ¬ Г§Г­Г Г·ГҐГ­ГЁГї ГЁГ§ Г¤Г°ГіГЈГ®Г© ГІГ ГЎГ«ГЁГ¶Г»
   	INSERT INTO unemployed (first_name, last_name, position) SELECT first_name, last_name, position FROM employee;
 
 -- 2. DELETE
--- 1. Всех записей
+-- 1. Г‚Г±ГҐГµ Г§Г ГЇГЁГ±ГҐГ©
    DELETE unemployed;
--- 2. По условию
+-- 2. ГЏГ® ГіГ±Г«Г®ГўГЁГѕ
    DELETE FROM unemployed WHERE first_name = 'Andrey';
--- 3. Очистить таблицу
+-- 3. ГЋГ·ГЁГ±ГІГЁГІГј ГІГ ГЎГ«ГЁГ¶Гі
    TRUNCATE TABLE unemployed;
 
 -- 3. UPDATE
--- 1. Всех записей
+-- 1. Г‚Г±ГҐГµ Г§Г ГЇГЁГ±ГҐГ©
    UPDATE employee SET position = 'fired';
--- 2. По условию обновляя один атрибут
+-- 2. ГЏГ® ГіГ±Г«Г®ГўГЁГѕ Г®ГЎГ­Г®ГўГ«ГїГї Г®Г¤ГЁГ­ Г ГІГ°ГЁГЎГіГІ
    UPDATE employee SET position = 'Middle developer' WHERE position = 'Junior developer';
--- 3. По условию обновляя несколько атрибутов
+-- 3. ГЏГ® ГіГ±Г«Г®ГўГЁГѕ Г®ГЎГ­Г®ГўГ«ГїГї Г­ГҐГ±ГЄГ®Г«ГјГЄГ® Г ГІГ°ГЁГЎГіГІГ®Гў
    UPDATE employee SET position = 'Rockstar', email='johnyrockstar@gmail.com' WHERE first_name = 'John' AND last_name='Dohn';
 
 -- 4. SELECT
---	1. С определенным набором извлекаемых атрибутов (SELECT atr1, atr2 FROM...)
+--	1. Г‘ Г®ГЇГ°ГҐГ¤ГҐГ«ГҐГ­Г­Г»Г¬ Г­Г ГЎГ®Г°Г®Г¬ ГЁГ§ГўГ«ГҐГЄГ ГҐГ¬Г»Гµ Г ГІГ°ГЁГЎГіГІГ®Гў (SELECT atr1, atr2 FROM...)
 	SELECT first_name, last_name, position, email FROM employee;
---	2. Со всеми атрибутами (SELECT * FROM...)
+--	2. Г‘Г® ГўГ±ГҐГ¬ГЁ Г ГІГ°ГЁГЎГіГІГ Г¬ГЁ (SELECT * FROM...)
 	SELECT * FROM project;
---	3. С условием по атрибуту (SELECT * FROM ... WHERE atr1 = "")
+--	3. Г‘ ГіГ±Г«Г®ГўГЁГҐГ¬ ГЇГ® Г ГІГ°ГЁГЎГіГІГі (SELECT * FROM ... WHERE atr1 = "")
 	SELECT * FROM project WHERE cost < 100000000;
 
 	-- 5. SELECT ORDER BY + TOP (LIMIT)
---  1. С сортировкой по возрастанию ASC + ограничение вывода количества записей
+--  1. Г‘ Г±Г®Г°ГІГЁГ°Г®ГўГЄГ®Г© ГЇГ® ГўГ®Г§Г°Г Г±ГІГ Г­ГЁГѕ ASC + Г®ГЈГ°Г Г­ГЁГ·ГҐГ­ГЁГҐ ГўГ»ГўГ®Г¤Г  ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ  Г§Г ГЇГЁГ±ГҐГ©
 	SELECT TOP 5 * FROM project ORDER BY cost ASC;
---  2. С сортировкой по убыванию DESC
+--  2. Г‘ Г±Г®Г°ГІГЁГ°Г®ГўГЄГ®Г© ГЇГ® ГіГЎГ»ГўГ Г­ГЁГѕ DESC
 	SELECT TOP 5 * FROM employee ORDER BY last_name DESC;
---  3. С сортировкой по двум атрибутам + ограничение вывода количества записей
+--  3. Г‘ Г±Г®Г°ГІГЁГ°Г®ГўГЄГ®Г© ГЇГ® Г¤ГўГіГ¬ Г ГІГ°ГЁГЎГіГІГ Г¬ + Г®ГЈГ°Г Г­ГЁГ·ГҐГ­ГЁГҐ ГўГ»ГўГ®Г¤Г  ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ  Г§Г ГЇГЁГ±ГҐГ©
 	SELECT TOP 5 * FROM employee ORDER BY first_name, last_name DESC;
---  4. С сортировкой по первому атрибуту, из списка извлекаемых
+--  4. Г‘ Г±Г®Г°ГІГЁГ°Г®ГўГЄГ®Г© ГЇГ® ГЇГҐГ°ГўГ®Г¬Гі Г ГІГ°ГЁГЎГіГІГі, ГЁГ§ Г±ГЇГЁГ±ГЄГ  ГЁГ§ГўГ«ГҐГЄГ ГҐГ¬Г»Гµ
 	SELECT TOP 5 * FROM employee ORDER BY 1;
 
--- 6. Работа с датами. Необходимо, чтобы одна из таблиц содержала атрибут с типом DATETIME.
---  1. WHERE по дате
+-- 6. ГђГ ГЎГ®ГІГ  Г± Г¤Г ГІГ Г¬ГЁ. ГЌГҐГ®ГЎГµГ®Г¤ГЁГ¬Г®, Г·ГІГ®ГЎГ» Г®Г¤Г­Г  ГЁГ§ ГІГ ГЎГ«ГЁГ¶ Г±Г®Г¤ГҐГ°Г¦Г Г«Г  Г ГІГ°ГЁГЎГіГІ Г± ГІГЁГЇГ®Г¬ DATETIME.
+--  1. WHERE ГЇГ® Г¤Г ГІГҐ
 	SELECT * FROM project WHERE start_date = '19/09/2012 00:00:00';
---  2. Извлечь из таблицы не всю дату, а только год. Например, год рождения автора.
+--  2. Г€Г§ГўГ«ГҐГ·Гј ГЁГ§ ГІГ ГЎГ«ГЁГ¶Г» Г­ГҐ ГўГ±Гѕ Г¤Г ГІГі, Г  ГІГ®Г«ГјГЄГ® ГЈГ®Г¤. ГЌГ ГЇГ°ГЁГ¬ГҐГ°, ГЈГ®Г¤ Г°Г®Г¦Г¤ГҐГ­ГЁГї Г ГўГІГ®Г°Г .
 	SELECT title, YEAR(start_date) AS start_date FROM project;
 
-	-- 7. SELECT GROUP BY с функциями агрегации
+	-- 7. SELECT GROUP BY Г± ГґГіГ­ГЄГ¶ГЁГїГ¬ГЁ Г ГЈГ°ГҐГЈГ Г¶ГЁГЁ
 --  1. MIN
 	SELECT title, MIN(cost) AS min_cost FROM project GROUP BY title;
 --  2. MAX
@@ -63,17 +63,17 @@ use bd_course;
 	SELECT title, COUNT(title) AS count FROM project GROUP BY title;
 
 -- 8. SELECT GROUP BY + HAVING
---  1. Написать 3 разных запроса с использованием GROUP BY + HAVING
+--  1. ГЌГ ГЇГЁГ±Г ГІГј 3 Г°Г Г§Г­Г»Гµ Г§Г ГЇГ°Г®Г±Г  Г± ГЁГ±ГЇГ®Г«ГјГ§Г®ГўГ Г­ГЁГҐГ¬ GROUP BY + HAVING
 	SELECT start_date FROM project GROUP BY start_date HAVING start_date < '19/09/2020 00:00:00';
 	SELECT title FROM project GROUP BY title HAVING MAX(cost) > 1000000;
 	SELECT title FROM project GROUP BY title HAVING COUNT(title) > 1;
 
 -- 9. SELECT JOIN
---  1. LEFT JOIN двух таблиц и WHERE по одному из атрибутов
+--  1. LEFT JOIN Г¤ГўГіГµ ГІГ ГЎГ«ГЁГ¶ ГЁ WHERE ГЇГ® Г®Г¤Г­Г®Г¬Гі ГЁГ§ Г ГІГ°ГЁГЎГіГІГ®Гў
 	SELECT * FROM employee LEFT JOIN project_participation ON employee.id_employee = project_participation.id_employee WHERE employee.id_employee > 2;
---  2. RIGHT JOIN. Получить такую же выборку, как и в 9.1
+--  2. RIGHT JOIN. ГЏГ®Г«ГіГ·ГЁГІГј ГІГ ГЄГіГѕ Г¦ГҐ ГўГ»ГЎГ®Г°ГЄГі, ГЄГ ГЄ ГЁ Гў 9.1
 	SELECT * FROM project_participation RIGHT JOIN employee ON employee.id_employee = project_participation.id_employee WHERE employee.id_employee > 2;
---  3. LEFT JOIN трех таблиц + WHERE по атрибуту из каждой таблицы
+--  3. LEFT JOIN ГІГ°ГҐГµ ГІГ ГЎГ«ГЁГ¶ + WHERE ГЇГ® Г ГІГ°ГЁГЎГіГІГі ГЁГ§ ГЄГ Г¦Г¤Г®Г© ГІГ ГЎГ«ГЁГ¶Г»
 	SELECT 
 		employee.id_employee, employee.last_name, 
 		project_participation.id_project, project_participation.id_employee, 
@@ -82,13 +82,13 @@ use bd_course;
 		employee LEFT JOIN project_participation ON employee.id_employee = project_participation.id_employee
     LEFT JOIN project ON project.id_project = project_participation.id_project
     WHERE employee.last_name = 'Holmes' AND employee.id_employee > 2 AND project.cost > 10000;
---  4. FULL OUTER JOIN двух таблиц
+--  4. FULL OUTER JOIN Г¤ГўГіГµ ГІГ ГЎГ«ГЁГ¶
 	SELECT * FROM project FULL OUTER JOIN employee ON project.id_project = employee.id_employee;
 
--- 10. Подзапросы
---  1. Написать запрос с WHERE IN (подзапрос)
+-- 10. ГЏГ®Г¤Г§Г ГЇГ°Г®Г±Г»
+--  1. ГЌГ ГЇГЁГ±Г ГІГј Г§Г ГЇГ°Г®Г± Г± WHERE IN (ГЇГ®Г¤Г§Г ГЇГ°Г®Г±)
 	SELECT * FROM project WHERE cost IN ('100000', '1000000');
-	--  2. Написать запрос SELECT atr1, atr2, (подзапрос) FROM ...    
+	--  2. ГЌГ ГЇГЁГ±Г ГІГј Г§Г ГЇГ°Г®Г± SELECT atr1, atr2, (ГЇГ®Г¤Г§Г ГЇГ°Г®Г±) FROM ...    
 
 	SELECT title, cost FROM project where start_date in('12/11/2020', '16/03/2030');
 
