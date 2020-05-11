@@ -20,22 +20,16 @@
 
 -- 3. UPDATE
 -- 1. Всех записей
-   UPDATE employee SET position = 'fired';
--- 2. По условию обновляя один атрибут
-   UPDATE employee SET position = 'Middle developer' WHERE position = 'Junior developer';
--- 3. По условию обновляя несколько атрибутов
-   UPDATE employee SET position = 'Rockstar', email='johnyrockstar@gmail.com' WHERE first_name = 'John' AND last_name='Dohn';
--- 1. ���� �������
    UPDATE position SET title = 'fired';
--- 2. �� ������� �������� ���� �������
+-- 2. По условию обновляя один атрибут
    UPDATE position SET title = 'Middle developer' WHERE title = 'Junior developer';
--- 3. �� ������� �������� ��������� ���������
+-- 3. По условию обновляя несколько атрибутов
    UPDATE position SET title = 'Rockstar', salary='1000000' WHERE skills = 'guitar, drags, c++';
 
 -- 4. SELECT
---	1. � ������������ ������� ����������� ��������� (SELECT atr1, atr2 FROM...)
+--	1. С определенным набором извлекаемых атрибутов (SELECT atr1, atr2 FROM...)
 	SELECT first_name, last_name, email FROM employee;
---	2. �� ����� ���������� (SELECT * FROM...)
+--	2. Со всеми атрибутами (SELECT * FROM...)
 	SELECT * FROM project;
 --	3. С условием по атрибуту (SELECT * FROM ... WHERE atr1 = "")
 	SELECT * FROM project WHERE cost < 100000000;
