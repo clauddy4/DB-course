@@ -1,4 +1,4 @@
-`use bd_course; 
+use bd_course; 
 
 -- 1. INSERT
 -- 1.1. Без указания списка полей
