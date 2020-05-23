@@ -1,6 +1,6 @@
 use booking
 
--- 1. Äîáàâèòü âíåøíèå êëþ÷è
+-- 1. Добавить внешние ключи.
 
 ALTER TABLE booking
 	ADD FOREIGN KEY (id_client) 
@@ -22,7 +22,7 @@ ALTER TABLE room_in_booking
 	ADD FOREIGN KEY (id_booking) 
 	REFERENCES booking (id_booking);
 
--- 2. Âûäàòü èíôîðìàöèþ î êëèåíòàõ ãîñòèíèöû "Êîñìîñ", ïðîæèâàþùèõ â íîìåðàõ êàòåãîðèè "Ëþêñ" íà 1 àïðåëÿ 2019ã
+-- 2. Выдать информацию о клиентах гостиницы "Космос", проживающих в номерах категории "Люкс" на 1 апреля 2019г. 
 
 SELECT client.id_client, client.name, client.phone 
 FROM client
@@ -36,14 +36,14 @@ WHERE
 	room_category.name = 'Ëþêñ' AND 
 	('2019-04-01' >= room_in_booking.checkin_date AND '2019-04-01' <= room_in_booking.checkout_date);
 
--- 3. Äàòü ñïèñîê ñâîáîäíûõ íîìåðîâ âñåõ ãîñòèíèö íà 22 àïðåëÿ.
+-- 3. Дать список свободных номеров всех гостиниц на 22 апреля. 
 	SELECT * FROM room WHERE id_room NOT IN (
 		SELECT room.id_room FROM room_in_booking 
 		LEFT JOIN room ON room.id_room = room_in_booking.id_room
 		WHERE '2019-04-22' >= room_in_booking.checkin_date AND '2019-04-22' <= room_in_booking.checkout_date)
 	ORDER BY id_room, id_hotel
 
---4  Äàòü êîëè÷åñòâî ïðîæèâàþùèõ â ãîñòèíèöå “Êîñìîñ” íà 23 ìàðòà ïî êàæäîé êàòåãîðèè íîìåðîâ
+-- 4. Дать количество проживающих в гостинице "Космос" на 23 марта по каждой категории номеров	
 SELECT 
 	COUNT(room_in_booking.id_room) AS guests_number, 
 	room_category.name 
@@ -54,8 +54,8 @@ FROM room_category
 WHERE hotel.name = 'Êîñìîñ' AND ('2019-03-23' >= room_in_booking.checkin_date AND '2019-03-23' < room_in_booking.checkout_date)
 GROUP BY room_category.name;
 
--- 5. Äàòü ñïèñîê ïîñëåäíèõ ïðîæèâàâøèõ êëèåíòîâ ïî âñåì êîìíàòàì ãîñòèíèöû "Êîñìîñ", âûåõàâøèì â àïðåëå ñ óêàçàíèåì äàòû âûåçäà. 
--- äîðàáîòàòü âûâîä çàïèñè room_in_booking ïî íàèìåíüøåìó id
+-- 5. Дать список последних проживавших клиентов по всем комнатам гостиницы "Космос", выехавшим в апреле с указанием даты выезда. 
+-- доработать вывод записи room_in_booking по наименьшему id
 
 SELECT client.id_client, client.name, room.id_room,	room_in_booking.checkout_date 
 FROM room_in_booking
@@ -70,7 +70,7 @@ INNER JOIN (SELECT room_in_booking.id_room, MAX(room_in_booking.checkout_date) A
 	WHERE room_in_booking.id_room = checkout_in_april.id_room AND checkout_in_april.check_max = room_in_booking.checkout_date
 	ORDER BY client.name;
 
--- 6. Ïðîäëèòü íà 2 äíÿ äàòó ïðîæèâàíèÿ â ãîñòèíèöå "Êîñìîñ" âñåì êëèåíòàì êîìíàò êàòåãîðèè "Áèçíåñ", êîòîðûå çàñåëèëèñü 10 ìàÿ.
+-- 6. Продлить на 2 дня дату проживания в гостинице "Космос" всем клиентам комнат категории "Бизнес", которые заселились 10 мая.
 
 UPDATE room_in_booking
 SET checkout_date = DATEADD(day, 2, checkout_date)
@@ -79,7 +79,7 @@ FROM room
 	INNER JOIN hotel ON hotel.id_hotel = room.id_hotel
 WHERE hotel.name = 'Êîñìîñ' AND room_category.name = 'Áèçíåñ' AND room_in_booking.checkin_date = '2019-05-10'
 
---7. Íàéòè âñå "ïåðåñåêàþùèåñÿ" âàðèàíòû ïðîæèâàíèÿ.
+--7. Найти все "пересекающиеся" варианты проживания.
 SELECT * FROM room_in_booking t1, room_in_booking t2
 	WHERE 
 		t1.id_room = t2.id_room AND t1.id_room_in_booking != t2.id_room_in_booking AND 
@@ -87,14 +87,14 @@ SELECT * FROM room_in_booking t1, room_in_booking t2
 	ORDER BY t1.id_room_in_booking
 
 
---8  Ñîçäàòü áðîíèðîâàíèå â òðàíçàêöèè
+-- 8. Создать бронирование в транзакции
 BEGIN TRANSACTION
 	INSERT INTO client VALUES ('Ìèõàëêîâ Íèêèòà Ñåðãååâè', '8(800)000000')
 	INSERT INTO booking VALUES (SCOPE_IDENTITY(), '2020-06-23')
 	INSERT INTO room_in_booking VALUES(SCOPE_IDENTITY(), 100, '2020-06-23', '2020-06-30')
 COMMIT;
 
--- 9. Äîáàâèòü íåîáõîäèìûå èíäåêñû äëÿ âñåõ òàáëèö
+-- 9. Добавить необходимые индексы для всех таблиц
 
 CREATE NONCLUSTERED INDEX [IX_booking_id_client] ON booking (id_client)
 CREATE NONCLUSTERED INDEX [IX_client_name] ON client (name)
