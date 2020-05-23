@@ -1,21 +1,21 @@
 use bd_course; 
 
 -- 1. INSERT
--- 1.1. Без указания списка полей
+-- 1.1. ��� �������� ������ �����
    INSERT INTO employee VALUES ('1', 'Andrey', 'Tokarev', 'QA engineer', 'tokarinze@gmail.com' );
 
---  1.2. С указанием списка полей
+--  1.2. � ��������� ������ �����
   	INSERT INTO project (title, cost, start_date, ending_date) VALUES ('BD course', '1000000000', '11-12-20', '12-10-28');
 
---  3. С чтением значения из другой таблицы
+--  3. � ������� �������� �� ������ �������
   	INSERT INTO unemployed (first_name, last_name, position) SELECT first_name, last_name, position FROM employee;
 
 -- 2. DELETE
--- 1. Всех записей
+-- 1. ���� �������
    DELETE unemployed;
--- 2. По условию
+-- 2. �� �������
    DELETE FROM unemployed WHERE first_name = 'Andrey';
--- 3. Очистить таблицу
+-- 3. �������� �������
    TRUNCATE TABLE unemployed;
 
 -- 3. UPDATE
@@ -31,26 +31,26 @@ use bd_course;
 	SELECT first_name, last_name, email FROM employee;
 --	2. Со всеми атрибутами (SELECT * FROM...)
 	SELECT * FROM project;
---	3. С условием по атрибуту (SELECT * FROM ... WHERE atr1 = "")
+--	3. � �������� �� �������� (SELECT * FROM ... WHERE atr1 = "")
 	SELECT * FROM project WHERE cost < 100000000;
 
--- 5. SELECT ORDER BY + TOP (LIMIT)
---  1.  С сортировкой по возрастанию ASC + ограничение вывода количества записей
+	-- 5. SELECT ORDER BY + TOP (LIMIT)
+--  1. � ����������� �� ����������� ASC + ����������� ������ ���������� �������
 	SELECT TOP 5 * FROM project ORDER BY cost ASC;
---  2. С сортировкой по убыванию DESC
+--  2. � ����������� �� �������� DESC
 	SELECT TOP 5 * FROM employee ORDER BY last_name DESC;
---  3. С сортировкой по двум атрибутам + ограничение вывода количества записей
+--  3. � ����������� �� ���� ��������� + ����������� ������ ���������� �������
 	SELECT TOP 5 * FROM employee ORDER BY first_name, last_name DESC;
---  4. С сортировкой по первому атрибуту, из списка извлекаемых
+--  4. � ����������� �� ������� ��������, �� ������ �����������
 	SELECT TOP 5 * FROM employee ORDER BY 1;
 
--- 6. Работа с датами. Необходимо, чтобы одна из таблиц содержала атрибут с типом DATETIME.
---  1. WHERE по дате
+-- 6. ������ � ������. ����������, ����� ���� �� ������ ��������� ������� � ����� DATETIME.
+--  1. WHERE �� ����
 	SELECT * FROM project WHERE start_date = '19/09/2012 00:00:00';
---  2. Извлечь из таблицы не всю дату, а только год. Например, год рождения автора.
+--  2. ������� �� ������� �� ��� ����, � ������ ���. ��������, ��� �������� ������.
 	SELECT title, YEAR(start_date) AS start_date FROM project;
 
-	-- 7. SELECT GROUP BY ñ ôóíêöèÿìè àãðåãàöèè
+	-- 7. SELECT GROUP BY � ��������� ���������
 --  1. MIN
 	SELECT title, MIN(cost) AS min_cost FROM project GROUP BY title;
 --  2. MAX
@@ -63,7 +63,7 @@ use bd_course;
 	SELECT title, COUNT(title) AS count FROM project GROUP BY title;
 
 -- 8. SELECT GROUP BY + HAVING
---      1. Написать 3 разных запроса с использованием GROUP BY + HAVING
+--  1. �������� 3 ������ ������� � �������������� GROUP BY + HAVING
 	SELECT start_date FROM project GROUP BY start_date HAVING start_date < '19/09/2020 00:00:00';
 	SELECT title FROM project GROUP BY title HAVING MAX(cost) > 1000000;
 	SELECT id_project_participation, COUNT(*) as projects_number 
@@ -72,11 +72,11 @@ use bd_course;
 	HAVING MAX(id_employee) >= 3;
 
 -- 9. SELECT JOIN
---  1. LEFT JOIN двух таблиц и WHERE по одному из атрибутов
+--  1. LEFT JOIN ���� ������ � WHERE �� ������ �� ���������
 	SELECT * FROM employee LEFT JOIN project_participation ON employee.id_employee = project_participation.id_employee WHERE employee.id_employee > 2;
---  2. RIGHT JOIN. Получить такую же выборку, как и в 9.1
+--  2. RIGHT JOIN. �������� ����� �� �������, ��� � � 9.1
 	SELECT * FROM project_participation RIGHT JOIN employee ON employee.id_employee = project_participation.id_employee WHERE employee.id_employee > 2;
---  3. LEFT JOIN трех таблиц + WHERE по атрибуту из каждой таблицы
+--  3. LEFT JOIN ���� ������ + WHERE �� �������� �� ������ �������
 	SELECT 
 		employee.id_employee, employee.last_name, 
 		project_participation.id_project, project_participation.id_employee, 
@@ -85,13 +85,13 @@ use bd_course;
 		employee LEFT JOIN project_participation ON employee.id_employee = project_participation.id_employee
     LEFT JOIN project ON project.id_project = project_participation.id_project
     WHERE employee.last_name = 'Holmes' AND employee.id_employee > 2 AND project.cost > 10000;
---  4. FULL OUTER JOIN двух таблиц
+--  4. FULL OUTER JOIN ���� ������
 	SELECT * FROM project FULL OUTER JOIN employee ON project.id_project = employee.id_employee;
 
--- 10. Подзапросы
--- 1. Написать запрос с WHERE IN (подзапрос)
+-- 10. ����������
+--  1. �������� ������ � WHERE IN (���������)
 	SELECT * FROM project WHERE cost IN ('100000', '1000000');
---2. Написать запрос SELECT atr1, atr2, (подзапрос) FROM   
+	--  2. �������� ������ SELECT atr1, atr2, (���������) FROM ...    
 
 	SELECT title, cost FROM project where start_date in('12/11/2020', '16/03/2030');
 
