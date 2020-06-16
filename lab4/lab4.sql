@@ -51,7 +51,7 @@ FROM room_category
 	INNER JOIN room ON room_category.id_room_category = room.id_room_category
 	INNER JOIN room_in_booking ON room.id_room = room_in_booking.id_room
 	INNER JOIN hotel ON hotel.id_hotel = room.id_hotel
-WHERE hotel.name = 'Êîñìîñ' AND ('2019-03-23' >= room_in_booking.checkin_date AND '2019-03-23' < room_in_booking.checkout_date)
+WHERE hotel.name = 'Космос' AND ('2019-03-23' >= room_in_booking.checkin_date AND '2019-03-23' < room_in_booking.checkout_date)
 GROUP BY room_category.name;
 
 -- 5. Дать список последних проживавших клиентов по всем комнатам гостиницы "Космос", выехавшим в апреле с указанием даты выезда. 
@@ -77,7 +77,7 @@ SET checkout_date = DATEADD(day, 2, checkout_date)
 FROM room
 	INNER JOIN room_category ON room_category.id_room_category = room.id_room_category
 	INNER JOIN hotel ON hotel.id_hotel = room.id_hotel
-WHERE hotel.name = 'Êîñìîñ' AND room_category.name = 'Áèçíåñ' AND room_in_booking.checkin_date = '2019-05-10'
+WHERE hotel.name = 'Космос' AND room_category.name = 'Бизнес' AND room_in_booking.checkin_date = '2019-05-10'
 
 --7. Найти все "пересекающиеся" варианты проживания.
 SELECT * FROM room_in_booking t1, room_in_booking t2
@@ -89,7 +89,7 @@ SELECT * FROM room_in_booking t1, room_in_booking t2
 
 -- 8. Создать бронирование в транзакции
 BEGIN TRANSACTION
-	INSERT INTO client VALUES ('Ìèõàëêîâ Íèêèòà Ñåðãååâè', '8(800)000000')
+	INSERT INTO client VALUES ('Волков Волк Волкович', '8(800)000000')
 	INSERT INTO booking VALUES (SCOPE_IDENTITY(), '2020-06-23')
 	INSERT INTO room_in_booking VALUES(SCOPE_IDENTITY(), 100, '2020-06-23', '2020-06-30')
 COMMIT;
