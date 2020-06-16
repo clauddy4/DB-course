@@ -32,8 +32,8 @@ FROM client
 	INNER JOIN hotel ON room.id_hotel = hotel.id_hotel
 	INNER JOIN room_category ON room.id_room_category = room_category.id_room_category
 WHERE 
-	hotel.name = 'Êîñìîñ' AND 
-	room_category.name = 'Ëþêñ' AND 
+	hotel.name = 'Космос' AND 
+	room_category.name = 'Люкс' AND 
 	('2019-04-01' >= room_in_booking.checkin_date AND '2019-04-01' <= room_in_booking.checkout_date);
 
 -- 3. Дать список свободных номеров всех гостиниц на 22 апреля. 
