@@ -34,7 +34,7 @@ FROM client
 WHERE 
 	hotel.name = 'Космос' AND 
 	room_category.name = 'Люкс' AND 
-	('2019-04-01' >= room_in_booking.checkin_date AND '2019-04-01' <= room_in_booking.checkout_date);
+	('2020-04-01' >= room_in_booking.checkin_date AND '2020-04-01' <= room_in_booking.checkout_date);
 
 -- 3. Дать список свободных номеров всех гостиниц на 22 апреля. 
 	SELECT * FROM room WHERE id_room NOT IN (
