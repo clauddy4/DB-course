@@ -57,12 +57,12 @@ GROUP BY room_category.name;
 -- 5. Дать список последних проживавших клиентов по всем комнатам гостиницы "Космос", выехавшим в апреле с указанием даты выезда. 
 -- доработать вывод записи room_in_booking по наименьшему id
 
-SELECT client.id_client, client.name, room.id_room,	room_in_booking.checkout_date 
+SELECT client.id_client, client.name, room.id_room, room_in_booking.checkout_date 
 FROM room_in_booking
 INNER JOIN room ON room.id_room = room_in_booking.id_room
 INNER JOIN booking ON booking.id_booking = room_in_booking.id_booking
 INNER JOIN client ON client.id_client = booking.id_client
-INNER JOIN (SELECT * FROM hotel WHERE hotel.name = 'Êîñìîñ') AS hotel ON hotel.id_hotel = room.id_hotel
+INNER JOIN (SELECT * FROM hotel WHERE hotel.name = 'Космос') AS hotel ON hotel.id_hotel = room.id_hotel
 INNER JOIN (SELECT room_in_booking.id_room, MAX(room_in_booking.checkout_date) AS check_max
 	FROM  (SELECT * FROM room_in_booking 
 		WHERE room_in_booking.checkout_date BETWEEN '2019-04-01' AND '2019-04-30') AS room_in_booking 
