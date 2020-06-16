@@ -80,11 +80,12 @@ FROM room
 WHERE hotel.name = 'Космос' AND room_category.name = 'Бизнес' AND room_in_booking.checkin_date = '2019-05-10'
 
 --7. Найти все "пересекающиеся" варианты проживания.
-SELECT * FROM room_in_booking t1, room_in_booking t2
-	WHERE 
-		t1.id_room = t2.id_room AND t1.id_room_in_booking != t2.id_room_in_booking AND 
-		(t1.checkin_date <= t2.checkin_date AND t2.checkin_date < t1.checkout_date)
-	ORDER BY t1.id_room_in_booking
+SELECT * FROM room_in_booking
+INNER JOIN room_in_booking AS room_in_booking_2 ON room_in_booking.id_room = room_in_booking_2.id_room 
+WHERE 
+	room_in_booking.id_room_in_booking != room_in_booking_2.id_room_in_booking AND 
+	(room_in_booking.checkin_date <= room_in_booking_2.checkin_date AND room_in_booking_2.checkin_date < room_in_booking.checkout_date)
+ORDER BY room_in_booking.id_room_in_booking
 
 
 -- 8. Создать бронирование в транзакции
