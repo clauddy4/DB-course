@@ -66,12 +66,26 @@ use bd_course;
 
 -- 8. SELECT GROUP BY + HAVING
 --  1. Написать 3 разных запроса с использованием GROUP BY + HAVING
-	SELECT start_date FROM project GROUP BY start_date HAVING start_date < '19/09/2020 00:00:00';
-	SELECT title FROM project GROUP BY title HAVING MAX(cost) > 1000000;
-	SELECT id_project_participation, COUNT(*) as projects_number 
-	FROM project_participation 
-	GROUP BY id_project_participation 
-	HAVING MAX(id_employee) >= 3;
+	
+	-- проекты, в которых учавствуют более 3 работников
+	SELECT id_project, COUNT(id_employee) as number_of_employees FROM project_participation 
+		GROUP BY id_project 
+		HAVING COUNT(id_employee) >= 3
+		
+	-- проекты, в которых бюджет на зарплату работникам превышают 400
+	SELECT project_participation.id_project, 
+		SUM(position.salary) AS budget_for_salaries
+		from project_participation 
+		INNER JOIN employee ON employee.id_employee = project_participation.id_employee
+		INNER JOIN position ON employee.id_position = position.id_position
+		GROUP BY id_project
+		HAVING SUM(salary) > 400
+		
+	-- работники, которые принимали участие в нескольких проектах	
+	SELECT id_employee, COUNT(id_project) as number_of_projects FROM project_participation 
+		GROUP BY id_employee
+		HAVING COUNT(id_project) > 1
+
 
 -- 9. SELECT JOIN
 --  1. LEFT JOIN двух таблиц и WHERE по одному из атрибутов
