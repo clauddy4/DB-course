@@ -72,7 +72,7 @@ use bd_course;
 		GROUP BY id_project 
 		HAVING COUNT(id_employee) >= 3
 		
-	-- проекты, в которых бюджет на зарплату работникам превышают 400
+	-- проекты, в которых бюджет на зарплату работникам превышает 400
 	SELECT project_participation.id_project, 
 		SUM(position.salary) AS budget_for_salaries
 		from project_participation 
