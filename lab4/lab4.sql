@@ -97,13 +97,40 @@ COMMIT;
 
 -- 9. Добавить необходимые индексы для всех таблиц
 
-CREATE NONCLUSTERED INDEX [IX_booking_id_client] ON booking (id_client)
-CREATE NONCLUSTERED INDEX [IX_client_name] ON client (name)
-CREATE NONCLUSTERED INDEX [IX_hotel_name] ON hotel (name)
-CREATE NONCLUSTERED INDEX [IX_room_id_room_category] ON room (id_room_category)
-CREATE NONCLUSTERED INDEX [IX_room_in_booking_id_room] ON room_in_booking (id_room)
-CREATE NONCLUSTERED INDEX [IX_room_in_booking_id_booking] ON room_in_booking (id_booking)
-CREATE NONCLUSTERED INDEX [IX_room_id_booking_checkinout_date] ON room_in_booking (checkin_date ASC, checkout_date ASC)
+CREATE NONCLUSTERED INDEX [IX_booking_id_client] ON booking 
+(
+	[id_client] ASC
+)
+CREATE NONCLUSTERED INDEX [IX_room_id_hotel-id_room_category] ON room
+(
+	[id_hotel] ASC,
+	[id_room_category] ASC
+)
+CREATE NONCLUSTERED INDEX [IX_hotel_name] ON hotel
+(
+	[name] ASC
+)
+CREATE NONCLUSTERED INDEX [IX_room_category_name] ON room_category
+(
+	[name] ASC
+)
+CREATE NONCLUSTERED INDEX [IX_room_in_booking_id_room] ON room_in_booking 
+(
+	[id_room] ASC
+)
+CREATE NONCLUSTERED INDEX [IX_room_in_booking_id_booking] ON room_in_booking 
+(
+	[id_booking] ASC
+)
+CREATE NONCLUSTERED INDEX [IX_room_id_booking_checkinout_date] ON room_in_booking 
+(
+	[checkin_date] ASC, 
+	[checkout_date] ASC
+)
+CREATE UNIQUE NONCLUSTERED INDEX [IU_client_phone] ON client
+(
+	[phone] ASC
+)
 	
 
 
