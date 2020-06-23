@@ -39,20 +39,20 @@ WHERE
 -- 3. Дать список свободных номеров всех гостиниц на 22 апреля. 
 	SELECT * FROM room WHERE id_room NOT IN (
 		SELECT room.id_room FROM room_in_booking 
-		LEFT JOIN room ON room.id_room = room_in_booking.id_room
+		RIGHT JOIN room ON room.id_room = room_in_booking.id_room
 		WHERE '2019-04-22' >= room_in_booking.checkin_date AND '2019-04-22' <= room_in_booking.checkout_date)
 	ORDER BY id_room, id_hotel
 
 -- 4. Дать количество проживающих в гостинице "Космос" на 23 марта по каждой категории номеров	
-SELECT 
-	COUNT(room_in_booking.id_room) AS guests_number, 
-	room_category.name 
+SELECT COUNT(room_in_booking.id_room) AS guests_number, 
+	room_category.id_room_category,
+	(SELECT name FROM room_category AS category_name WHERE category_name.id_room_category = room_category.id_room_category) 
 FROM room_category
 	INNER JOIN room ON room_category.id_room_category = room.id_room_category
 	INNER JOIN room_in_booking ON room.id_room = room_in_booking.id_room
 	INNER JOIN hotel ON hotel.id_hotel = room.id_hotel
 WHERE hotel.name = 'Космос' AND ('2019-03-23' >= room_in_booking.checkin_date AND '2019-03-23' < room_in_booking.checkout_date)
-GROUP BY room_category.name;
+GROUP BY room_category.id_room_category;
 
 -- 5. Дать список последних проживавших клиентов по всем комнатам гостиницы "Космос", выехавшим в апреле с указанием даты выезда. 
 -- доработать вывод записи room_in_booking по наименьшему id
@@ -68,7 +68,7 @@ INNER JOIN (SELECT room_in_booking.id_room, MAX(room_in_booking.checkout_date) A
 		WHERE room_in_booking.checkout_date BETWEEN '2019-04-01' AND '2019-04-30') AS room_in_booking 
 		GROUP BY room_in_booking.id_room) AS checkout_in_april ON checkout_in_april.id_room =  room_in_booking.id_room
 	WHERE room_in_booking.id_room = checkout_in_april.id_room AND checkout_in_april.check_max = room_in_booking.checkout_date
-	ORDER BY client.name;
+	ORDER BY room.id_room;
 
 -- 6. Продлить на 2 дня дату проживания в гостинице "Космос" всем клиентам комнат категории "Бизнес", которые заселились 10 мая.
 
